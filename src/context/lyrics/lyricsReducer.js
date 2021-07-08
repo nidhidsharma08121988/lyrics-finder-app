@@ -3,7 +3,7 @@ const lyricsReducer = (state, action) => {
   switch (action.type) {
     case SET_TRACKS:
       return {
-        ...state,
+        heading: state.heading,
         tracks_list: action.payload,
       };
     default:

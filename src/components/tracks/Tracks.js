@@ -4,17 +4,25 @@ import Spinner from '../layout/Spinner';
 
 const Tracks = () => {
   const listContext = useContext(ListContext);
-  console.log(listContext);
   const { tracks_list, heading } = listContext;
+
+  console.log(listContext);
+
   return (
-    <div>
-      <h1>{heading}</h1>
-      <div className=''>
+    <>
+      <div>
         {/* {console.log(tracks_list)} */}
         {tracks_list &&
-          (tracks_list.length === 0 ? <Spinner /> : 'load the tracks')}
+          (tracks_list.length === 0 ? (
+            <Spinner />
+          ) : (
+            <>
+              <h3 className='text-center mb-4'>{heading}</h3>
+              <div className='row'></div>
+            </>
+          ))}
       </div>
-    </div>
+    </>
   );
 };
 
