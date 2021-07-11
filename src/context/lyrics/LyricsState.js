@@ -4,7 +4,8 @@ import lyricsReducer from './lyricsReducer';
 import axios from 'axios';
 import { SET_TRACKS } from '../types';
 const LyricsState = props => {
-  // useState is used as we need to update the initial state in useEffect
+  //useState is used as we need to update the initial state in useEffect
+  //eslint-disable-next-line
   const [initialState, setInitialState] = useState({
     tracks_list: [],
     heading: 'Top 10 tracks',

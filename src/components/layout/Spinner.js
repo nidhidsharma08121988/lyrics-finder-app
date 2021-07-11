@@ -8,8 +8,7 @@ const Spinner = () => {
         alt='Loading...'
         style={{
           width: '200px',
-          height: '200px',
-          margin: '40x auto',
+          margin: '40px auto',
           display: 'block',
         }}
       />

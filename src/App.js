@@ -3,6 +3,7 @@ import Navbar from './components/layout/Navbar';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Index from './components/layout/Index';
 import ListState from './context/lyrics/LyricsState';
+import Lyrics from './components/tracks/Lyrics';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
           <div className='container'>
             <Switch>
               <Route exact path='/' component={Index} />
-              <Route></Route>
+              <Route exact path='/lyrics/track/:id' component={Lyrics}></Route>
             </Switch>
           </div>
         </div>
