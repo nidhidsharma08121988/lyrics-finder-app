@@ -6,7 +6,7 @@ import Track from './Track';
 const Tracks = () => {
   const listContext = useContext(ListContext);
   const { tracks_list, heading } = listContext;
-  console.log(tracks_list);
+
 
   return (
     <>

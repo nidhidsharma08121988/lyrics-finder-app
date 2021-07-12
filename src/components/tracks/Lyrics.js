@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Spinner from '../layout/Spinner';
 import { Link } from 'react-router-dom';
+import Moment from 'react-moment';
 
 const Lyrics = props => {
   const [track, setTrack] = useState({});
@@ -13,9 +14,16 @@ const Lyrics = props => {
   const apiTrack = `track.get?track_id=${track_id}`;
 
   const loadTrackLyrics = async () => {
+    const header = {
+      'Content-Type': 'application/json',
+    };
     // load lyrics
+    const corsAnywhere = 'https://cors-anywhere.herokuapp.com';
     const resLyrics = await axios.get(
-      `https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/${apiLyrics}&apikey=${process.env.REACT_APP_MM_KEY}`
+      `${corsAnywhere}/https://api.musixmatch.com/ws/1.1/${apiLyrics}&apikey=${process.env.REACT_APP_MM_KEY}`,
+      {
+        headers: header,
+      }
     );
     const dataLyrics = resLyrics.data;
     const track_lyrics = dataLyrics.message.body.lyrics;
@@ -23,11 +31,15 @@ const Lyrics = props => {
 
     // load track
     const resTrack = await axios.get(
-      `https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/${apiTrack}&apikey=${process.env.REACT_APP_MM_KEY}`
+      `${corsAnywhere}/https://api.musixmatch.com/ws/1.1/${apiTrack}&apikey=${process.env.REACT_APP_MM_KEY}`,
+      {
+        headers: header,
+      }
     );
     const dataTrack = resTrack.data;
     const the_track = dataTrack.message.body.track;
     setTrack(the_track);
+    // console.log(track);
   };
 
   useEffect(() => {
@@ -43,6 +55,8 @@ const Lyrics = props => {
   ) {
     return <Spinner />;
   } else {
+    const genre = track.primary_genres.music_genre_list;
+    console.log(genre);
     return (
       <>
         <Link to='/' className='btn btn-dark btn-sm mb-4'>
@@ -56,6 +70,29 @@ const Lyrics = props => {
           <div className='card-body'>
             <p className='card-text'>{lyrics.lyrics_body}</p>
           </div>
+
+          <ul className='list-group mb-3'>
+            <li className='list-group-item'>
+              <strong>Album ID </strong>: {track.album_id}
+            </li>
+            <li className='list-group-item'>
+              <strong>Song Genre </strong>:
+              {genre.length > 0 && genre[0].music_genre}
+            </li>
+            <li className='list-group-item'>
+              <strong>Explicit Words</strong>:{' '}
+              {track.explicit === 0 ? 'No' : 'Yes'}
+            </li>
+            <li className='list-group-item'>
+              {/* npm i moment react-moment */}
+              {/* it is handy tool to format dates */}
+              <strong>Release Date</strong>:{' '}
+              <Moment format='MM/DD/YYYY'>
+                {' '}
+                {track.updated_time && track.updated_time}
+              </Moment>
+            </li>
+          </ul>
         </div>
       </>
     );

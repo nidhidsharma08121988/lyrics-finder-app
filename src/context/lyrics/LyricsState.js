@@ -12,14 +12,21 @@ const LyricsState = props => {
   });
 
   //load tracks initially when the component loads
-  const loadTracks = async () => {
+  const loadTracksUsingAxios = async () => {
     try {
+      const header = {
+        'Content-Type': 'application/json',
+      };
       // the original request will be blocked by the CORS hence i have to put
       // https://cors-anywhere.herokuapp.com/
       // before the actual request
       // https://api.musixmatch.com/ws/1.1/chart.tracks.get?chart_name=top&page=1&page_size=10&country=us&f_has_lyrics=1&apikey=${process.env.REACT_APP_MM_KEY}
+      const corsAnywhere = 'https://cors-anywhere.herokuapp.com';
       let res = await axios.get(
-        `https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/chart.tracks.get?chart_name=top&page=1&page_size=10&country=us&f_has_lyrics=1&apikey=${process.env.REACT_APP_MM_KEY}`
+        `${corsAnywhere}/https://api.musixmatch.com/ws/1.1/chart.tracks.get?chart_name=top&page=1&page_size=10&country=us&f_has_lyrics=1&apikey=${process.env.REACT_APP_MM_KEY}`,
+        {
+          headers: header,
+        }
       );
       let data = res.data;
       let tracks = data.message.body.track_list;
@@ -34,7 +41,7 @@ const LyricsState = props => {
   };
 
   useEffect(() => {
-    loadTracks();
+    loadTracksUsingAxios();
   }, []);
 
   const [state, dispatch] = useReducer(lyricsReducer, initialState);
