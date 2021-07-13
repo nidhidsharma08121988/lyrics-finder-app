@@ -23,8 +23,8 @@ const Track = props => {
           </p>
           {/* help redirect to the lyrics page with the instance's track id */}
           <Link
-            to={`/lyrics/track/${track.track_id}`}
             className='btn btn-dark btn-block'
+            to={`/lyrics/track/${track.track_id}`}
           >
             <i className='fa fa-chevron-right' /> View Lyrics
           </Link>

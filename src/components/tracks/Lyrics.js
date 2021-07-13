@@ -39,7 +39,6 @@ const Lyrics = props => {
     const dataTrack = resTrack.data;
     const the_track = dataTrack.message.body.track;
     setTrack(the_track);
-    // console.log(track);
   };
 
   useEffect(() => {
@@ -56,7 +55,6 @@ const Lyrics = props => {
     return <Spinner />;
   } else {
     const genre = track.primary_genres.music_genre_list;
-    console.log(genre);
     return (
       <>
         <Link to='/' className='btn btn-dark btn-sm mb-4'>
@@ -65,10 +63,14 @@ const Lyrics = props => {
         <div className='card'>
           <h5 className='card-header'>
             {track.track_name} by{' '}
-            <span className='text-secondary'>{track.artist_name}</span>
+            <span className='text-secondary'>
+              {track.artist_name && track.artist_name}
+            </span>
           </h5>
           <div className='card-body'>
-            <p className='card-text'>{lyrics.lyrics_body}</p>
+            <p className='card-text'>
+              {lyrics.lyrics_body && lyrics.lyrics_body}
+            </p>
           </div>
 
           <ul className='list-group mb-3'>
@@ -77,7 +79,7 @@ const Lyrics = props => {
             </li>
             <li className='list-group-item'>
               <strong>Song Genre </strong>:
-              {genre.length > 0 && genre[0].music_genre}
+              {genre.length > 0 && genre[0].music_genre.music_genre_name}
             </li>
             <li className='list-group-item'>
               <strong>Explicit Words</strong>:{' '}
@@ -87,10 +89,9 @@ const Lyrics = props => {
               {/* npm i moment react-moment */}
               {/* it is handy tool to format dates */}
               <strong>Release Date</strong>:{' '}
-              <Moment format='MM/DD/YYYY'>
-                {' '}
-                {track.updated_time && track.updated_time}
-              </Moment>
+              {track.updated_time && (
+                <Moment format='MM/DD/YYYY'>{track.updated_time}</Moment>
+              )}
             </li>
           </ul>
         </div>
