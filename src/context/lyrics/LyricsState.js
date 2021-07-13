@@ -2,7 +2,7 @@ import React, { useState, useReducer, useEffect } from 'react';
 import LyricsContext from './lyricsContext';
 import lyricsReducer from './lyricsReducer';
 import axios from 'axios';
-import { SET_HEADING, SET_TRACKS } from '../types';
+import { CLEAR_SEARCH, SET_TRACKS, UPDATE_TRACKS } from '../types';
 const LyricsState = props => {
   //useState is used as we need to update the initial state in useEffect
   //eslint-disable-next-line
@@ -12,7 +12,7 @@ const LyricsState = props => {
   });
 
   //load tracks initially when the component loads
-  const loadTracksUsingAxios = async () => {
+  const loadTopTracks = async () => {
     try {
       const header = {
         'Content-Type': 'application/json',
@@ -41,23 +41,40 @@ const LyricsState = props => {
   };
 
   useEffect(() => {
-    loadTracksUsingAxios();
+    loadTopTracks();
   }, []);
 
+  // update to contain search results
   const updateTrackList = tracks_list => {
     dispatch({
-      type: SET_TRACKS,
+      type: UPDATE_TRACKS,
       payload: tracks_list,
     });
   };
 
-  const setHeading = heading => {
-    dispatch({
-      type: SET_HEADING,
-      payload: heading,
-    });
+  const clearSearch = async () => {
+    try {
+      const header = {
+        'Content-Type': 'application/json',
+      };
+      const corsAnywhere = 'https://cors-anywhere.herokuapp.com';
+      const res = await axios.get(
+        `${corsAnywhere}/https://api.musixmatch.com/ws/1.1/chart.tracks.get?chart_name=top&page=1&page_size=10&country=us&f_has_lyrics=1&apikey=${process.env.REACT_APP_MM_KEY}`,
+        {
+          headers: header,
+        }
+      );
+      const data = res.data;
+      const tracks = data.message.body.track_list;
+      // load state in reducer
+      dispatch({
+        type: CLEAR_SEARCH,
+        payload: tracks,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
-
   const [state, dispatch] = useReducer(lyricsReducer, initialState);
 
   return (
@@ -66,7 +83,7 @@ const LyricsState = props => {
         heading: state.heading,
         tracks_list: state.tracks_list,
         updateTrackList,
-        setHeading,
+        clearSearch,
       }}
     >
       {props.children}

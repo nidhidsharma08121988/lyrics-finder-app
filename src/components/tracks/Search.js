@@ -5,11 +5,12 @@ import LyricsContext from '../../context/lyrics/lyricsContext';
 const Search = () => {
   const [trackTitle, setTrackTitle] = useState('');
   const lyricsContext = useContext(LyricsContext);
-  const { setHeading, updateTrackList } = lyricsContext;
+  const { updateTrackList, clearSearch } = lyricsContext;
 
   const handleChange = e => {
     setTrackTitle(e.target.value);
   };
+
   const findTrack = async e => {
     e.preventDefault();
     // reload tracks and update the context
@@ -26,11 +27,17 @@ const Search = () => {
       );
       const data = res.data;
       const tracks = data.message.body.track_list;
-      console.log(tracks);
+      // next update the tracks
       updateTrackList(tracks);
-      setHeading('Search Results');
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  const clear = () => {
+    clearSearch();
+  };
+
   return (
     <div className='card card-body mb-4 p-4'>
       <h1 className='display-4 text-center'>
@@ -48,8 +55,11 @@ const Search = () => {
             onChange={handleChange}
           />
         </div>
-        <button className='btn btn-primary btn-lg btn-block mb-5' type='submit'>
+        <button className='btn btn-primary btn-block' type='submit'>
           Get Track Lyrics
+        </button>
+        <button className='btn btn-secondary btn-block' onClick={clear}>
+          Clear Search
         </button>
       </form>
     </div>
